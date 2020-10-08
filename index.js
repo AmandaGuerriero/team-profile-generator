@@ -8,11 +8,14 @@ function addTeamMember() {
             type: 'checkbox',
             name: 'role',
             message: 'What type of employee are you entering?',
-            choices: ['Manager', 'Engineer', 'Intern']
+            choices: ['Manager', 'Engineer', 'Intern'],
         },
     ])
-    mainQuestions(this.role)
+    .then(answers => {
+        mainQuestions(answers)
+    })
 };
+
 
 function mainQuestions() {
     inquirer.prompt ([
@@ -39,8 +42,8 @@ function mainQuestions() {
             name: 'email',
             message: 'Please enter the email address',
         },
-    ])
-    .then(function({role, name, id, email}){
+    ]) 
+    .then(answers => {
         if (this.role === "Engineer") {
             engineerQuestions ();
         } else if (this.role === "Intern") {
@@ -63,7 +66,7 @@ function managerQuestions() {
 }
 
 // array of questions for interns only
-function managerQuestions() {
+function internQuestions() {
     inquirer.prompt([
         {
             type: 'input',
