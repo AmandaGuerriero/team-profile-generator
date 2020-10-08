@@ -6,13 +6,12 @@ function addTeamMember() {
     inquirer.prompt ([
         {
             type: 'checkbox',
-            name: 'type',
+            name: 'role',
             message: 'What type of employee are you entering?',
-            choices: ["Manger", "Engineer", "Intern"]
+            choices: ['Manager', 'Engineer', 'Intern']
         },
     ])
-    mainQuestions ()
-    additionalQuestions (this.type)
+    mainQuestions(this.role)
 };
 
 function mainQuestions() {
@@ -41,39 +40,37 @@ function mainQuestions() {
             message: 'Please enter the email address',
         },
     ])
+    .then(function({role, name, id, email}){
+        if (this.role === "Engineer") {
+            engineerQuestions ();
+        } else if (this.role === "Intern") {
+            internQuestions ();
+        } else {
+            managerQuestions();
+        }
+    })
 };
-
-function additionalQuestions() {
-    if (this.type === "Engineer") {
-        engineerQuestions ();
-    } else if (this.type === "Intern") {
-        internQuestions ();
-    } else {
-        managerQuestions();
-    }
-}
-
 
 // array of questions for managers only
 function managerQuestions() {
-    [
+    inquirer.prompt([
         {
             type: 'input',
             name: 'officeNumber',
             message: 'Please enter the office phone number (No dashes)'
         },
-    ]
+    ])
 }
 
 // array of questions for interns only
 function managerQuestions() {
-    [
+    inquirer.prompt([
         {
             type: 'input',
             name: 'school',
             message: 'What school do they attend?'
         },
-    ]
+    ])
 }
 
 // array of questions for engineers only
@@ -89,7 +86,7 @@ function engineerQuestions() {
 
 // function to initialize program
 function init() {
-    addTeamMember ()
+    addTeamMember()
     
     // fs.writeFile('./dist/output.html', generateMarkdown(response), (err) => {
     //         if (err) {
