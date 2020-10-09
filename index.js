@@ -1,6 +1,16 @@
-const inquirer = require('inquirer');
-const fs = require('fs');
-const generateMarkdown = require('./utils/generateMarkdown');
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const inquirer = require("inquirer");
+const path = require("path");
+const fs = require("fs");
+
+const OUTPUT_DIR = path.resolve(__dirname, "output");
+const outputPath = path.join(OUTPUT_DIR, "team.html");
+
+const render = require("./lib/htmlRenderer");
+const team = [];
+const idArr = [];
 
 // find out what type of employee they are
 function addTeamMember() {
@@ -48,7 +58,7 @@ function mainQuestions(teamMemberRole) {
     .then(answers => {
         console.log(teamMemberRole);
         if (teamMemberRole === "Engineer") {
-            return engineerQuestions();
+            return engineerQuestions(answers.name, answers.id, answers.email);
         } else if (teamMemberRole === "Intern") {
             return internQuestions();
         } else {
@@ -66,7 +76,11 @@ function managerQuestions() {
             message: 'Please enter the office phone number (No dashes)'
         },
     ])
-}
+    .then(answers => {
+        console.log("Finished with Employee" );
+        return addMoreTeamMembers();
+    })
+};
 
 // array of questions for interns only
 function internQuestions() {
@@ -80,7 +94,7 @@ function internQuestions() {
 }
 
 // array of questions for engineers only
-function engineerQuestions() {
+function engineerQuestions(name, id, email) {
     inquirer.prompt ([
         {
             type: 'input',
@@ -88,18 +102,49 @@ function engineerQuestions() {
             message: 'What is their github name?',
         },
     ])
+    .then(answers => {
+        const engineer = new Engineer (name, id, email, answers.github);
+        team.push(engineer)
+        idArr.push(id)
+        addMoreTeamMembers();
+        console.log(team);
+    })
 }
+
+// ask if another team member should be added
+function addMoreTeamMembers() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'add',
+            message: 'Do you want to add another team member?',
+            choices: ["Yes", "No"]
+        },
+    ])
+    .then(answers => {
+        if (answers.add === "Yes") {
+            console.log(answers.add);
+            return addTeamMember();
+        } else {
+            buildTeam();
+        }
+    })
+};
 
 // function to initialize program
 function init() {
     addTeamMember()
-    
-    fs.writeFile('./dist/output.html', generateMarkdown(response), (err) => {
-            if (err) {
-                return err;
-            }
-        })
+   
 }
 
 // function call to initialize program
 init();
+
+// build the team
+function buildTeam() {
+    // create the output directory if it doesn't exist
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR)
+    }
+    fs.writeFileSync(outputPath, render(team), 'utf-8');
+  }
