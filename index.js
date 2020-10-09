@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+const generateMarkdown = require('./utils/generateMarkdown');
 
-// array of questions for every employee
+// find out what type of employee they are
 function addTeamMember() {
     inquirer.prompt ([
         {
@@ -16,7 +17,7 @@ function addTeamMember() {
     })
 };
 
-
+// array of questions for every employee
 function mainQuestions(teamMemberRole) {
     console.log(teamMemberRole);
     inquirer.prompt ([
@@ -93,11 +94,11 @@ function engineerQuestions() {
 function init() {
     addTeamMember()
     
-    // fs.writeFile('./dist/output.html', generateMarkdown(response), (err) => {
-    //         if (err) {
-    //             return err;
-    //         }
-    //     })
+    fs.writeFile('./dist/output.html', generateMarkdown(response), (err) => {
+            if (err) {
+                return err;
+            }
+        })
 }
 
 // function call to initialize program
