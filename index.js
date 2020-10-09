@@ -5,19 +5,20 @@ const fs = require('fs');
 function addTeamMember() {
     inquirer.prompt ([
         {
-            type: 'checkbox',
+            type: 'list',
             name: 'role',
             message: 'What type of employee are you entering?',
             choices: ['Manager', 'Engineer', 'Intern'],
         },
     ])
     .then(answers => {
-        mainQuestions(answers)
+        mainQuestions(answers.role)
     })
 };
 
 
-function mainQuestions() {
+function mainQuestions(teamMemberRole) {
+    console.log(teamMemberRole);
     inquirer.prompt ([
         {
             type: 'input',
@@ -44,12 +45,13 @@ function mainQuestions() {
         },
     ]) 
     .then(answers => {
-        if (this.role === "Engineer") {
-            engineerQuestions ();
-        } else if (this.role === "Intern") {
-            internQuestions ();
+        console.log(teamMemberRole);
+        if (teamMemberRole === "Engineer") {
+            return engineerQuestions();
+        } else if (teamMemberRole === "Intern") {
+            return internQuestions();
         } else {
-            managerQuestions();
+            return managerQuestions();
         }
     })
 };
