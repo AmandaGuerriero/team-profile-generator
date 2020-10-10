@@ -1,6 +1,6 @@
 # Team Profile Generator
 
-[![Github license](https://img.shields.io/badge/license-MIT-blue.svg)]
+![Github license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Description
 Use this application to create a directory that displays all your employee's information in one place after answering a series of questions
