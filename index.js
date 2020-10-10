@@ -29,7 +29,6 @@ function addTeamMember() {
 
 // array of questions for every employee
 function mainQuestions(teamMemberRole) {
-    console.log(teamMemberRole);
     inquirer.prompt ([
         {
             type: 'input',
@@ -72,7 +71,6 @@ function mainQuestions(teamMemberRole) {
         },
     ]) 
     .then(answers => {
-        console.log(teamMemberRole);
         if (teamMemberRole === "Engineer") {
             return engineerQuestions(answers.name, answers.id, answers.email);
         } else if (teamMemberRole === "Intern") {
@@ -167,7 +165,6 @@ function addMoreTeamMembers() {
     ])
     .then(answers => {
         if (answers.add === "Yes") {
-            console.log(answers.add);
             return addTeamMember();
         } else {
             buildTeam();
