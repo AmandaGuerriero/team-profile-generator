@@ -60,15 +60,15 @@ function mainQuestions(teamMemberRole) {
         if (teamMemberRole === "Engineer") {
             return engineerQuestions(answers.name, answers.id, answers.email);
         } else if (teamMemberRole === "Intern") {
-            return internQuestions();
+            return internQuestions(answers.name, answers.id, answers.email);
         } else {
-            return managerQuestions();
+            return managerQuestions(answers.name, answers.id, answers.email);
         }
     })
 };
 
 // array of questions for managers only
-function managerQuestions() {
+function managerQuestions(name, id, email) {
     inquirer.prompt([
         {
             type: 'input',
@@ -77,13 +77,15 @@ function managerQuestions() {
         },
     ])
     .then(answers => {
-        console.log("Finished with Employee" );
-        return addMoreTeamMembers();
+        const manager = new Manager (name, id, email, answers.officeNumber);
+        team.push(manager)
+        idArr.push(id)
+        addMoreTeamMembers();
     })
 };
 
 // array of questions for interns only
-function internQuestions() {
+function internQuestions(name, id, email) {
     inquirer.prompt([
         {
             type: 'input',
@@ -91,6 +93,12 @@ function internQuestions() {
             message: 'What school do they attend?'
         },
     ])
+    .then(answers => {
+        const intern = new Intern (name, id, email, answers.school);
+        team.push(intern)
+        idArr.push(id)
+        addMoreTeamMembers();
+    })
 }
 
 // array of questions for engineers only
@@ -107,7 +115,6 @@ function engineerQuestions(name, id, email) {
         team.push(engineer)
         idArr.push(id)
         addMoreTeamMembers();
-        console.log(team);
     })
 }
 
