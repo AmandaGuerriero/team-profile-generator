@@ -35,24 +35,40 @@ function mainQuestions(teamMemberRole) {
             type: 'input',
             name: 'name',
             message: 'What is the name of the team member?',
-            validate: nameInput => {
-                if (nameInput) {
-                return true;
-                } else {
-                console.log('You must enter a name!');
-                return false;
-                }
+            validate: answer => {
+                if (answer !== '') {
+                    return true;
+                } 
+                return ('You must enter a name!');
             }
         },
         {
             type: 'input',
             name: 'id',
-            message: 'Please enter the employee id'
+            message: 'Please enter the employee id',
+            validate: answer => {
+                const pass = answer.match(
+                    /[1-9]/                
+                );
+                if (pass) {
+                    return true;
+                }
+                return ('You need to input a number')
+            }
         },
         {
             type: 'input',
             name: 'email',
             message: 'Please enter the email address',
+            validate: answer => {
+                const pass = answer.match(
+                    /\S+@\S+\.\S+/                
+                );
+                if (pass) {
+                    return true;
+                }
+                return ('You need to input a valid email address')
+            }
         },
     ]) 
     .then(answers => {
@@ -73,7 +89,16 @@ function managerQuestions(name, id, email) {
         {
             type: 'input',
             name: 'officeNumber',
-            message: 'Please enter the office phone number (No dashes)'
+            message: 'Please enter the office phone number (No dashes)',
+            validate: answer => {
+                const pass = answer.match(
+                    /[1-9]/                
+                );
+                if (pass) {
+                    return true;
+                }
+                return ('You need to input a number')
+            }
         },
     ])
     .then(answers => {
@@ -90,7 +115,13 @@ function internQuestions(name, id, email) {
         {
             type: 'input',
             name: 'school',
-            message: 'What school do they attend?'
+            message: 'What school do they attend?',
+            validate: answer => {
+                if (answer !== '') {
+                    return true;
+                } 
+                return ('You must enter a school!');
+            }
         },
     ])
     .then(answers => {
@@ -108,6 +139,12 @@ function engineerQuestions(name, id, email) {
             type: 'input',
             name: 'github',
             message: 'What is their github name?',
+            validate: answer => {
+                if (answer !== '') {
+                    return true;
+                } 
+                return ('You must enter a github name!');
+            }
         },
     ])
     .then(answers => {
